@@ -6,7 +6,13 @@
 <body>
 
 <h1>Student Dashboard</h1>
-
+<br>
+<a class="nav" href="Home.html">Home</a> |
+<a class="nav" href="Dashboard.html">Dashboard</a> |
+<a class="nav" href="Courses.html">Courses</a> |
+<a class="nav">Attendance</a> |
+<a class="nav">Results </a>|
+<a class="nav" href="Login.html">Logout</a>
 <hr>
 
 <h2>Academic Summary</h2>
@@ -40,17 +46,30 @@
 </table>
 
 <br>
+<h2>Enrolled Courses</h2>
 
-<h3>Menu</h3>
+<ul id="courseList"></ul>
 
-<ol>
-<li>Profile</li>
-<li>Courses</li>
-<li>Assignments</li>
-<li>Results</li>
-<li>Settings</li>
-<li>Logout</li>
-</ol>
+<script>
 
+let courses = JSON.parse(localStorage.getItem("courses")) || [];
+
+let list = document.getElementById("courseList");
+
+if(courses.length==0){
+
+list.innerHTML="<li>No Courses Enrolled</li>";
+
+}else{
+
+courses.forEach(function(course){
+
+list.innerHTML += "<li>"+course+"</li>";
+
+});
+
+}
+
+</script>
 </body>
 </html>

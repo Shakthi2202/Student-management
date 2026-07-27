@@ -1,0 +1,74 @@
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Student Portal Courses</title>
+<link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+<h1>Student Portal</h1>
+<br>
+<a class="nav" href="Home.html">Home</a> |
+<a class="nav" href="Dashboard.html">Dashboard</a> |
+<a class="nav" href="Courses.html">Courses</a> |
+<a class="nav">Attendance</a> |
+<a class="nav">Results </a>|
+<a class="nav" href="Login.html">Logout</a>
+ 
+<hr>
+
+<h2>My Courses</h2>
+
+<div class="course-card">
+<h3>Python Programming</h3>
+<p>Learn Python from Basics to Advanced.</p>
+<button onclick="enroll('Python Programming'),this.textContent='Enrolled'">Enroll Now</button>
+</div>
+
+<div class="course-card">
+<h3>Java Programming</h3>
+<p>Object Oriented Programming using Java.</p>
+<button onclick="enroll('Java Programming'),this.textContent='Enrolled'">Enroll Now</button>
+</div>
+
+<div class="course-card">
+<h3>UI / UX Design</h3>
+<p>Design beautiful user interfaces.</p>
+<button onclick="enroll('UI / UX Design',this.textContent='Enrolled')">Enroll Now</button>
+</div>
+
+<div class="course-card">
+<h3>Machine Learning</h3>
+<p>Introduction to ML Algorithms.</p>
+<button onclick="enroll('Machine Learning'),this.textContent='Enrolled'">Enroll Now</button>
+</div>
+
+<div class="course-card">
+<h3>Cloud Computing</h3>
+<p>AWS & Google Cloud Basics.</p>
+<button onclick="enroll('Cloud Computing'),this.textContent='Enrolled'">Enroll Now</button>
+</div>
+
+<script>
+function enroll(course){
+
+let courses = JSON.parse(localStorage.getItem("courses")) || [];
+
+// Prevent duplicate courses
+if(courses.includes(course)){
+    alert("Already Enrolled!");
+    return;
+}
+
+courses.push(course);
+
+localStorage.setItem("courses", JSON.stringify(courses));
+
+alert(course + " Enrolled Successfully!");
+
+}
+</script>
+
+</body>
+</html>

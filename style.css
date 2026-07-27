@@ -121,3 +121,48 @@ p{
 hr{
     margin:20px 0;
 }
+.course-card{
+
+    width:320px;
+    background:white;
+    margin:25px auto;
+    padding:25px;
+    border-radius:15px;
+    box-shadow:0 5px 15px rgba(0,0,0,.2);
+    text-align:center;
+}
+
+.course-card h3{
+
+    color:#6f42c1;
+}
+
+.course-card p{
+
+    color:#555;
+    margin:15px 0;
+}
+
+button{
+
+    width:100%;
+    padding:12px;
+    border:none;
+    background:#6f42c1;
+    color:white;
+    border-radius:25px;
+    font-size:16px;
+    cursor:pointer;
+}
+
+button:hover{
+
+    background:#4e2d8d;
+    transform:scale(1.03);
+}
+
+.course-card:hover{
+
+    transform:translateY(-5px);
+    transition:.3s;
+}
