@@ -1,73 +1,126 @@
+<!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<title>Student Portal Courses</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Campus Connect — Courses</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@500;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="style.css">
 </head>
-
 <body>
 
-<h1>Student Portal</h1>
-<br>
-<a class="nav" href="Home.html">Home</a> |
-<a class="nav" href="Dashboard.html">Dashboard</a> |
-<a class="nav" href="Courses.html">Courses</a> |
-<a class="nav">Attendance</a> |
-<a class="nav">Results </a>|
-<a class="nav" href="Login.html">Logout</a>
- 
-<hr>
-
-<h2>My Courses</h2>
-
-<div class="course-card">
-<h3>Python Programming</h3>
-<p>Learn Python from Basics to Advanced.</p>
-<button onclick="enroll('Python Programming'),this.textContent='Enrolled'">Enroll Now</button>
+<div class="topbar">
+    <div class="brand"><span class="dot"></span>Campus Connect</div>
+    <nav class="navlinks">
+        <a class="nav" href="Home.html">Home</a>
+        <a class="nav" href="Dashboard.html">Dashboard</a>
+        <a class="nav" href="Courses.html">Courses</a>
+        <a class="nav">Attendance</a>
+        <a class="nav">Results</a>
+        <a class="nav" href="Login.html">Logout</a>
+    </nav>
 </div>
 
-<div class="course-card">
-<h3>Java Programming</h3>
-<p>Object Oriented Programming using Java.</p>
-<button onclick="enroll('Java Programming'),this.textContent='Enrolled'">Enroll Now</button>
+<div class="page-head">
+    <h2 style="text-align:left;margin-left:0;">My Courses</h2>
+    <p class="subtext" style="text-align:left;">Enroll in a course, then open its learning path to track each step.</p>
 </div>
 
-<div class="course-card">
-<h3>UI / UX Design</h3>
-<p>Design beautiful user interfaces.</p>
-<button onclick="enroll('UI / UX Design',this.textContent='Enrolled')">Enroll Now</button>
-</div>
+<div class="course-grid" id="courseGrid"></div>
 
-<div class="course-card">
-<h3>Machine Learning</h3>
-<p>Introduction to ML Algorithms.</p>
-<button onclick="enroll('Machine Learning'),this.textContent='Enrolled'">Enroll Now</button>
-</div>
-
-<div class="course-card">
-<h3>Cloud Computing</h3>
-<p>AWS & Google Cloud Basics.</p>
-<button onclick="enroll('Cloud Computing'),this.textContent='Enrolled'">Enroll Now</button>
-</div>
-
+<script src="app.js"></script>
 <script>
-function enroll(course){
 
-let courses = JSON.parse(localStorage.getItem("courses")) || [];
+function renderCourses(){
+    const grid = document.getElementById("courseGrid");
+    grid.innerHTML = "";
 
-// Prevent duplicate courses
-if(courses.includes(course)){
-    alert("Already Enrolled!");
-    return;
+    COURSES.forEach(function(course, ci){
+        const enrolled = isEnrolled(course.id);
+        const pct = courseProgressPercent(course.id, course.steps.length);
+
+        const card = document.createElement("div");
+        card.className = "course-card";
+
+        let stepsHtml = "";
+        course.steps.forEach(function(step, si){
+            const done = getCourseProgress(course.id).includes(si);
+            stepsHtml += `
+                <div class="step ${done ? 'done' : ''}" onclick="handleStepClick('${escapeAttr(course.id)}', ${si})">
+                    <div class="step-dot">${done ? "✓" : (si + 1)}</div>
+                    <div class="step-body">
+                        <div class="step-title">${step.title}</div>
+                        <div class="step-desc">${step.desc}</div>
+                    </div>
+                </div>`;
+        });
+
+        card.innerHTML = `
+            <div class="course-top">
+                <div>
+                    <h3>${course.id}</h3>
+                </div>
+                <span class="level-badge">${course.level}</span>
+            </div>
+            <p>${course.desc}</p>
+            <div class="course-meta">
+                <span>⏱ ${course.duration}</span>
+                <span>🧭 ${course.steps.length} modules</span>
+            </div>
+            <div class="course-actions">
+                <button class="${enrolled ? 'btn-enrolled' : ''}" onclick="handleEnroll('${escapeAttr(course.id)}', this)">
+                    ${enrolled ? "✓ Enrolled" : "Enroll Now"}
+                </button>
+                <button class="btn-secondary" onclick="togglePath(${ci})">View Path</button>
+            </div>
+            <div class="path-panel" id="path-${ci}">
+                <div class="path-progress-label">
+                    <span>Learning path progress</span>
+                    <b id="pct-${ci}">${pct}%</b>
+                </div>
+                <div class="progress-mini" style="margin-bottom:16px;">
+                    <span style="width:${pct}%;"></span>
+                </div>
+                ${enrolled ? `<div class="steps">${stepsHtml}</div>` : `<div class="path-lock-note">Enroll in this course to start checking off modules.</div><div class="steps">${stepsHtml}</div>`}
+            </div>
+        `;
+
+        grid.appendChild(card);
+    });
 }
 
-courses.push(course);
-
-localStorage.setItem("courses", JSON.stringify(courses));
-
-alert(course + " Enrolled Successfully!");
-
+function escapeAttr(str){
+    return str.replace(/'/g, "\\'");
 }
+
+function handleEnroll(courseName, btn){
+    const wasEnrolled = isEnrolled(courseName);
+    enroll(courseName);
+    if(!wasEnrolled){
+        renderCourses();
+    }
+}
+
+function togglePath(index){
+    const panel = document.getElementById("path-" + index);
+    panel.classList.toggle("open");
+}
+
+function handleStepClick(courseName, stepIndex){
+    if(!isEnrolled(courseName)){
+        showToast("Enroll in " + courseName + " first to track this step.", "info");
+        return;
+    }
+    toggleStep(courseName, stepIndex);
+    renderCourses();
+    // re-open the panel for this course after re-render
+    const ci = COURSES.findIndex(c => c.id === courseName);
+    if(ci > -1) document.getElementById("path-" + ci).classList.add("open");
+}
+
+renderCourses();
+
 </script>
 
 </body>

@@ -1,31 +1,84 @@
-<html>
+<!DOCTYPE html>
+<html lang="en">
 <head>
-<title>Student Portal</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Campus Connect — Home</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@500;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
-<h1>Campus Connect</h1>
-<br>
-<a class="nav">Home</a> |
-<a class="nav" href="Dashboard.html">Dashboard</a> |
-<a class="nav">Courses</a> |
-<a class="nav">Attendance</a> |
-<a class="nav">Results </a>|
-<a class="nav" href="Login.html">Logout</a>
- 
-<hr>
-
-<h2>Hello, Shakthi!</h2>
-<div>
-<ol>
-<li>Profile</li>
-<li>Courses</li>
-<li>Attendance</li>
-<li>Results</li>
-<li>Library</li>
-<li>Assignments</li>
-</ol>
+<div class="topbar">
+    <div class="brand"><span class="dot"></span>Campus Connect</div>
+    <nav class="navlinks">
+        <a class="nav" href="Home.html">Home</a>
+        <a class="nav" href="Dashboard.html">Dashboard</a>
+        <a class="nav" href="Courses.html">Courses</a>
+        <a class="nav">Attendance</a>
+        <a class="nav">Results</a>
+        <a class="nav" href="Login.html">Logout</a>
+    </nav>
 </div>
+
+<div class="hero">
+    <div class="hero-card">
+        <h2 id="greeting">Hello, Shakthi!</h2>
+        <p>Welcome back to your student portal. Pick up where you left off, check your progress, or explore a new course below.</p>
+    </div>
+</div>
+
+<div class="page-head">
+    <h2 style="text-align:left;margin-left:0;">Quick Access</h2>
+</div>
+
+<div class="quick-grid">
+    <a class="quick-card" href="Dashboard.html#profile">
+        <div class="quick-icon">🎓</div>
+        <span>Profile</span>
+    </a>
+    <a class="quick-card" href="Courses.html">
+        <div class="quick-icon">📚</div>
+        <span>Courses</span>
+    </a>
+    <a class="quick-card" href="Dashboard.html">
+        <div class="quick-icon">🗓️</div>
+        <span>Attendance</span>
+    </a>
+    <a class="quick-card" href="Dashboard.html">
+        <div class="quick-icon">📊</div>
+        <span>Results</span>
+    </a>
+    <a class="quick-card" onclick="showToast('Library module coming soon.', 'info')">
+        <div class="quick-icon">📖</div>
+        <span>Library</span>
+    </a>
+    <a class="quick-card" onclick="showToast('Assignments module coming soon.', 'info')">
+        <div class="quick-icon">📝</div>
+        <span>Assignments</span>
+    </a>
+</div>
+
+<script src="app.js"></script>
+<script>
+document.addEventListener("DOMContentLoaded", function(){
+    const hour = new Date().getHours();
+    let timeGreeting = "Hello";
+    if(hour < 12) timeGreeting = "Good morning";
+    else if(hour < 18) timeGreeting = "Good afternoon";
+    else timeGreeting = "Good evening";
+
+    document.getElementById("greeting").textContent = timeGreeting + ", Shakthi!";
+
+    const courses = getEnrolledCourses();
+    if(courses.length === 0){
+        showToast("You're not enrolled in any courses yet — check out Courses.", "info", 4000);
+    }else{
+        showToast("You have " + courses.length + " course" + (courses.length > 1 ? "s" : "") + " in progress.", "success", 3500);
+    }
+});
+</script>
+
 </body>
 </html>

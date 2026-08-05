@@ -1,29 +1,74 @@
-<html>
+<!DOCTYPE html>
+<html lang="en">
 <head>
-<title>Register</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Campus Connect — Register</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@500;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
-<h1>Campus Connect</h1>
+<div class="topbar">
+    <div class="brand"><span class="dot"></span>Campus Connect</div>
+</div>
 
-<h2>Create New Account</h2>
+<div class="auth-wrap">
+<form id="registerForm">
+    <div class="form-title">
+        <div class="badge">Student Portal</div>
+        <h2>Create Account</h2>
+    </div>
 
-<form action="Home.html">
+    <label class="field-label" for="name">Student Name</label>
+    <input id="name" type="text" placeholder="Full name" required>
 
-<input type="text" placeholder="Student Name" required><br><br>
+    <label class="field-label" for="email">Email</label>
+    <input id="email" type="email" placeholder="you@campus.edu" required>
 
-<input type="email" placeholder="Email"  required><br><br>
+    <label class="field-label" for="password">Password</label>
+    <input id="password" type="password" placeholder="Password" required>
 
-<input type="password" placeholder="Password" required><br><br>
+    <label class="field-label" for="confirm">Confirm Password</label>
+    <input id="confirm" type="password" placeholder="Confirm password" required>
 
-<input type="password" placeholder="Confirm Password" required><br><br>
-
-<button>Create Account</button>
-<br><br>
-<a class="btn" href="Login.html">Already have an Account</a>
-
+    <button type="submit">Create Account</button>
+    <a class="btn" href="Login.html">Already have an Account</a>
 </form>
+</div>
+
+<script src="app.js"></script>
+<script>
+document.getElementById("registerForm").addEventListener("submit", function(e){
+    e.preventDefault();
+
+    const name = document.getElementById("name").value.trim();
+    const email = document.getElementById("email").value.trim();
+    const password = document.getElementById("password").value;
+    const confirm = document.getElementById("confirm").value;
+
+    if(!name || !email || !password || !confirm){
+        showToast("Please fill in every field.", "error");
+        return;
+    }
+
+    if(password.length < 6){
+        showToast("Password must be at least 6 characters.", "error");
+        return;
+    }
+
+    if(password !== confirm){
+        showToast("Passwords don't match.", "error");
+        return;
+    }
+
+    showToast("Account created — welcome, " + name.split(" ")[0] + "!", "success");
+    setTimeout(function(){
+        window.location.href = "Home.html";
+    }, 900);
+});
+</script>
 
 </body>
 </html>
