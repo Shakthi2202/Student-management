@@ -29,8 +29,20 @@
 
 <div class="course-grid" id="courseGrid"></div>
 
-<script src="app.js"></script>
-<script>
+<script type="module">
+import {
+    showToast,
+    COURSES,
+    isEnrolled,
+    enroll,
+    getCourseProgress,
+    toggleStep,
+    courseProgressPercent
+} from './app.js';
+
+function escapeAttr(str){
+    return str.replace(/'/g, "\\'");
+}
 
 function renderCourses(){
     const grid = document.getElementById("courseGrid");
@@ -69,7 +81,7 @@ function renderCourses(){
                 <span>🧭 ${course.steps.length} modules</span>
             </div>
             <div class="course-actions">
-                <button class="${enrolled ? 'btn-enrolled' : ''}" onclick="handleEnroll('${escapeAttr(course.id)}', this)">
+                <button class="${enrolled ? 'btn-enrolled' : ''}" onclick="handleEnroll('${escapeAttr(course.id)}')">
                     ${enrolled ? "✓ Enrolled" : "Enroll Now"}
                 </button>
                 <button class="btn-secondary" onclick="togglePath(${ci})">View Path</button>
@@ -90,11 +102,7 @@ function renderCourses(){
     });
 }
 
-function escapeAttr(str){
-    return str.replace(/'/g, "\\'");
-}
-
-function handleEnroll(courseName, btn){
+function handleEnroll(courseName){
     const wasEnrolled = isEnrolled(courseName);
     enroll(courseName);
     if(!wasEnrolled){
@@ -119,8 +127,12 @@ function handleStepClick(courseName, stepIndex){
     if(ci > -1) document.getElementById("path-" + ci).classList.add("open");
 }
 
-renderCourses();
+// Inline onclick attributes above need these on window, since module scope isn't global.
+window.handleEnroll = handleEnroll;
+window.togglePath = togglePath;
+window.handleStepClick = handleStepClick;
 
+renderCourses();
 </script>
 
 </body>

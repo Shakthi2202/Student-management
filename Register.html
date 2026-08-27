@@ -38,8 +38,9 @@
 </form>
 </div>
 
-<script src="app.js"></script>
-<script>
+<script type="module">
+import { registerUser } from './auth.js';
+
 document.getElementById("registerForm").addEventListener("submit", function(e){
     e.preventDefault();
 
@@ -48,25 +49,13 @@ document.getElementById("registerForm").addEventListener("submit", function(e){
     const password = document.getElementById("password").value;
     const confirm = document.getElementById("confirm").value;
 
-    if(!name || !email || !password || !confirm){
-        showToast("Please fill in every field.", "error");
-        return;
-    }
+    const success = registerUser(name, email, password, confirm);
 
-    if(password.length < 6){
-        showToast("Password must be at least 6 characters.", "error");
-        return;
+    if(success){
+        setTimeout(function(){
+            window.location.href = "Home.html";
+        }, 900);
     }
-
-    if(password !== confirm){
-        showToast("Passwords don't match.", "error");
-        return;
-    }
-
-    showToast("Account created — welcome, " + name.split(" ")[0] + "!", "success");
-    setTimeout(function(){
-        window.location.href = "Home.html";
-    }, 900);
 });
 </script>
 

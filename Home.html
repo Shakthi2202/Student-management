@@ -24,7 +24,7 @@
 
 <div class="hero">
     <div class="hero-card">
-        <h2 id="greeting">Hello, Shakthi!</h2>
+        <h2 id="greeting">Hello!</h2>
         <p>Welcome back to your student portal. Pick up where you left off, check your progress, or explore a new course below.</p>
     </div>
 </div>
@@ -50,18 +50,27 @@
         <div class="quick-icon">📊</div>
         <span>Results</span>
     </a>
-    <a class="quick-card" onclick="showToast('Library module coming soon.', 'info')">
+    <a class="quick-card" id="libraryCard">
         <div class="quick-icon">📖</div>
         <span>Library</span>
     </a>
-    <a class="quick-card" onclick="showToast('Assignments module coming soon.', 'info')">
+    <a class="quick-card" id="assignmentsCard">
         <div class="quick-icon">📝</div>
         <span>Assignments</span>
     </a>
 </div>
 
-<script src="app.js"></script>
-<script>
+<script type="module">
+import { showToast, getEnrolledCourses } from './app.js';
+import { getCurrentUser } from './auth.js';
+
+document.getElementById("libraryCard").addEventListener("click", function(){
+    showToast("Library module coming soon.", "info");
+});
+document.getElementById("assignmentsCard").addEventListener("click", function(){
+    showToast("Assignments module coming soon.", "info");
+});
+
 document.addEventListener("DOMContentLoaded", function(){
     const hour = new Date().getHours();
     let timeGreeting = "Hello";
@@ -69,7 +78,10 @@ document.addEventListener("DOMContentLoaded", function(){
     else if(hour < 18) timeGreeting = "Good afternoon";
     else timeGreeting = "Good evening";
 
-    document.getElementById("greeting").textContent = timeGreeting + ", Shakthi!";
+    const user = getCurrentUser();
+    const firstName = user ? user.name.split(" ")[0] : "Shakthi";
+
+    document.getElementById("greeting").textContent = timeGreeting + ", " + firstName + "!";
 
     const courses = getEnrolledCourses();
     if(courses.length === 0){

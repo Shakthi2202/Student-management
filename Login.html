@@ -29,31 +29,26 @@
 
     <button type="submit">Sign In</button>
     <a class="btn" href="Register.html">Create Account</a>
+    <p class="form-hint">No account yet? Registering creates one you can sign in with.</p>
 </form>
 </div>
 
-<script src="app.js"></script>
-<script>
+<script type="module">
+import { loginUser } from './auth.js';
+
 document.getElementById("loginForm").addEventListener("submit", function(e){
     e.preventDefault();
 
     const email = document.getElementById("email").value.trim();
     const password = document.getElementById("password").value;
 
-    if(!email || !password){
-        showToast("Please fill in both fields.", "error");
-        return;
-    }
+    const success = loginUser(email, password);
 
-    if(password.length < 4){
-        showToast("Password looks too short.", "error");
-        return;
+    if(success){
+        setTimeout(function(){
+            window.location.href = "Home.html";
+        }, 900);
     }
-
-    showToast("Signed in — welcome back!", "success");
-    setTimeout(function(){
-        window.location.href = "Home.html";
-    }, 900);
 });
 </script>
 

@@ -55,8 +55,8 @@
 
 <ul id="courseList"></ul>
 
-<script src="app.js"></script>
-<script>
+<script type="module">
+import { showToast, getEnrolledCourses, COURSES, courseProgressPercent } from './app.js';
 
 function renderEnrolled(){
     const courses = getEnrolledCourses();
