@@ -29,16 +29,9 @@
 
 <div class="course-grid" id="courseGrid"></div>
 
-<script type="module">
-import {
-    showToast,
-    COURSES,
-    isEnrolled,
-    enroll,
-    getCourseProgress,
-    toggleStep,
-    courseProgressPercent
-} from './app.js';
+<script src="app.js"></script>
+<script src="auth.js"></script>
+<script>
 
 function escapeAttr(str){
     return str.replace(/'/g, "\\'");
@@ -126,11 +119,6 @@ function handleStepClick(courseName, stepIndex){
     const ci = COURSES.findIndex(c => c.id === courseName);
     if(ci > -1) document.getElementById("path-" + ci).classList.add("open");
 }
-
-// Inline onclick attributes above need these on window, since module scope isn't global.
-window.handleEnroll = handleEnroll;
-window.togglePath = togglePath;
-window.handleStepClick = handleStepClick;
 
 renderCourses();
 </script>

@@ -60,10 +60,9 @@
     </a>
 </div>
 
-<script type="module">
-import { showToast, getEnrolledCourses } from './app.js';
-import { getCurrentUser } from './auth.js';
-
+<script src="app.js"></script>
+<script src="auth.js"></script>
+<script>
 document.getElementById("libraryCard").addEventListener("click", function(){
     showToast("Library module coming soon.", "info");
 });

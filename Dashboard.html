@@ -55,8 +55,9 @@
 
 <ul id="courseList"></ul>
 
-<script type="module">
-import { showToast, getEnrolledCourses, COURSES, courseProgressPercent } from './app.js';
+<script src="app.js"></script>
+<script src="auth.js"></script>
+<script>
 
 function renderEnrolled(){
     const courses = getEnrolledCourses();
@@ -87,9 +88,9 @@ function renderEnrolled(){
 
 renderEnrolled();
 
-const courses = getEnrolledCourses();
-if(courses.length > 0){
-    const allDone = courses.every(function(c){
+const enrolledNow = getEnrolledCourses();
+if(enrolledNow.length > 0){
+    const allDone = enrolledNow.every(function(c){
         const meta = COURSES.find(m => m.id === c);
         return meta && courseProgressPercent(c, meta.steps.length) === 100;
     });
